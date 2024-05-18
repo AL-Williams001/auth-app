@@ -25,19 +25,19 @@ mongoose
     console.error("Error connecting to MongoDB:", error);
   });
 
+// ROUTES
+
+app.use("/api/user", userRoute);
+app.use("/api/auth", authRoute);
+
 // Middlewares
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success: false,
     message,
     statusCode,
   });
 });
-
-// ROUTES
-
-app.use("/api/user", userRoute);
-app.use("/api/auth", authRoute);

@@ -13,6 +13,7 @@ const SignIn = () => {
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -44,42 +45,46 @@ const SignIn = () => {
   };
 
   return (
-    <div className="p-5 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="email"
-          placeholder="Email"
-          id="email"
-          className="bg-gray-100 border border-gray-300 rounded-lg p-3  "
-          onChange={handleChange}
-          autoComplete="current-email"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          id="password"
-          className="bg-gray-100 border border-gray-300 rounded-lg p-3  "
-          onChange={handleChange}
-          autoComplete="current-password"
-        />
-        <button
-          disabled={loading}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg uppercase"
-        >
-          {loading ? "Loading..." : "Sign In"}
-        </button>
-        <OAuth />
-      </form>
-      <div className="flex gap-2 mt-5">
-        <p>Don&apos;t have an account?</p>
-        <Link to="/sign-up">
-          <span className="text-blue-500 font-semibold">Sign up</span>
-        </Link>
+    <div className="w-full min-h-screen bg-gray-700 ">
+      <div className="p-5 max-w-lg mx-auto rounded-lg shadow-md">
+        <h1 className="text-3xl text-center font-semibold my-7 text-black">
+          Sign In
+        </h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="email"
+            placeholder="Email"
+            id="email"
+            className="bg-gray-100 border border-gray-300 rounded-lg p-3"
+            onChange={handleChange}
+            autoComplete="current-email"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            className="bg-gray-100 border border-gray-300 rounded-lg p-3"
+            onChange={handleChange}
+            autoComplete="current-password"
+          />
+          <button
+            disabled={loading}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg uppercase"
+          >
+            {loading ? "Loading..." : "Sign In"}
+          </button>
+          <OAuth />
+        </form>
+        <div className="flex gap-2 mt-5">
+          <p className="text-black">Don&apos;t have an account?</p>
+          <Link to="/sign-up">
+            <span className="text-blue-500 font-semibold">Sign up</span>
+          </Link>
+        </div>
+        <p className="text-red-500 mt-5">
+          {error ? error.message || "Something went wrong!" : ""}
+        </p>
       </div>
-      <p className="text-red-700 mt-5">
-        {error ? error.message || "Something went wrong!" : ""}
-      </p>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import {
   getDownloadURL,
@@ -7,7 +7,6 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { useDispatch } from "react-redux";
 import {
   updateUserStart,
   updateUserSuccess,
@@ -111,81 +110,87 @@ const Profile = () => {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col  gap-3">
-        <input
-          type="file"
-          ref={fileRef}
-          hidden
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
-        />
-        <img
-          src={formData.profilePicture || currentUser.profilePicture}
-          alt="profile"
-          className="rounded-full h-24 w-24 object-cover self-center cursor-pointer mb-2 mt-2"
-          onClick={() => fileRef.current.click()}
-        />
-        <p className="text-sm self-center">
-          {imageError ? (
-            <span className="text-red-700">
-              Error uploading image (file size must be less than 10 MB)
-            </span>
-          ) : imagePercent > 0 && imagePercent < 100 ? (
-            <span className="text-yellow-400">{`Uploading: ${imagePercent} %`}</span>
-          ) : imagePercent === 100 ? (
-            <span className="text-green-700">Image uploaded successfully</span>
-          ) : (
-            ""
-          )}
+    <div className="w-full min-h-screen bg-gray-700 ">
+      <div className="p-3 max-w-lg mx-auto rounded-lg shadow-md">
+        <h1 className="text-3xl font-semibold text-center my-7 text-white">
+          Profile
+        </h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <input
+            type="file"
+            ref={fileRef}
+            hidden
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+          <img
+            src={formData.profilePicture || currentUser.profilePicture}
+            alt="profile"
+            className="rounded-full h-24 w-24 object-cover self-center cursor-pointer mb-2 mt-2"
+            onClick={() => fileRef.current.click()}
+          />
+          <p className="text-sm self-center text-white">
+            {imageError ? (
+              <span className="text-red-500">
+                Error uploading image (file size must be less than 10 MB)
+              </span>
+            ) : imagePercent > 0 && imagePercent < 100 ? (
+              <span className="text-yellow-400">{`Uploading: ${imagePercent} %`}</span>
+            ) : imagePercent === 100 ? (
+              <span className="text-green-700">
+                Image uploaded successfully
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
+          <input
+            defaultValue={currentUser.username}
+            type="text"
+            id="username"
+            placeholder="Username"
+            className="bg-gray-100 border border-gray-300 rounded-lg p-3"
+            onChange={handleChange}
+          />
+          <input
+            defaultValue={currentUser.email}
+            type="email"
+            id="email"
+            placeholder="Email"
+            className="bg-gray-100 border border-gray-300 rounded-lg p-3"
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            className="bg-gray-100 border border-gray-300 rounded-lg p-3"
+            onChange={handleChange}
+          />
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg uppercase">
+            {loading ? "Loading..." : "Updated"}
+          </button>
+        </form>
+        <div className="flex justify-between mt-5">
+          <span
+            onClick={handleDeleteAccount}
+            className="text-red-500 cursor-pointer font-semibold"
+          >
+            Delete Account
+          </span>
+          <span
+            onClick={handleSignOut}
+            className="text-red-500 cursor-pointer font-semibold"
+          >
+            {" "}
+            Sign Out
+          </span>
+        </div>
+        <p className="text-red-500 mt-5">{error && "Something went wrong!"}</p>
+        <p className="text-green-500 mt-5">
+          {updateSuccess && "Update is successful!"}
         </p>
-        <input
-          defaultValue={currentUser.username}
-          type="text"
-          id="username"
-          placeholder="Username"
-          className="bg-gray-100 border border-gray-300 rounded-lg p-3 "
-          onChange={handleChange}
-        />
-        <input
-          defaultValue={currentUser.email}
-          type="email"
-          id="email"
-          placeholder="Email"
-          className="bg-gray-100 border border-gray-300 rounded-lg p-3 "
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          className="bg-gray-100 border border-gray-300 rounded-lg p-3 "
-          onChange={handleChange}
-        />
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg uppercase">
-          {loading ? "Loading..." : "Updated"}
-        </button>
-      </form>
-      <div className="flex justify-between mt-5">
-        <span
-          onClick={handleDeleteAccount}
-          className="text-red-700 cursor-pointer font-semibold"
-        >
-          Delete Account
-        </span>
-        <span
-          onClick={handleSignOut}
-          className="text-red-700 cursor-pointer font-semibold"
-        >
-          {" "}
-          Sign Out
-        </span>
       </div>
-      <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
-      <p className="text-green-500 mt-5">
-        {updateSuccess && "Update is succesful!"}
-      </p>
     </div>
   );
 };
